@@ -1,0 +1,36 @@
+graph = {
+    'A': [{'B': '3'}, {'D': '4'}, {'E': '5'}],
+    'B': [{'C': '1'}],
+    'C': [{'I': '3'}, {'G': '1'}],
+    'D': [{'F': '2'}],
+    'E': [{'C': '2'}, {'I': '1'}],
+    'F': [{'E': '1'}, {'H': '2'}],
+    'G': [],
+    'H': [{'I': '1'}],
+    'I': [{'G': '5'}],
+}
+
+visited = set()  # Set to keep track of visited nodes of graph.
+lst = []
+minn = 0
+
+def dfs(visited, graph, node, goal):  # function for dfs
+    if node not in visited:
+        print(node)
+        visited.add(node)
+        for neighbour in graph[node]: # Find Minimums
+            lst.append(int((list(neighbour.values()).pop())))
+        
+        minn = min(lst)
+        for neighbour in graph[node]:
+            if minn == int((list(neighbour.values()).pop())):
+                minkey =list(neighbour.keys()).pop()
+                if minkey != goal:
+                    dfs(visited, graph, minkey, goal)
+                else:
+                    print(minkey, '\tGoal Acheived !!!')
+
+        
+# Driver Code
+print("Following is the shortest path in which least number of nodes using dept_first search")
+dfs(visited, graph, 'A', 'G')

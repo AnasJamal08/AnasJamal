@@ -1,0 +1,34 @@
+graph = {
+  'A' : [[10,'B'],[8,'C']],
+  'B' : [[4,'D'], [3,'F'],[2,'E']],
+  'C' : [[5,'F']],
+  'D' : [],
+  'E' : [[3,'F']],
+  'F' : []
+}
+
+visited = set() # Set to keep track of visited nodes of graph.
+
+found=False
+mygoal='B' 
+def dfs(visited, graph, node,goal):  #function for dfs 
+   
+    global found
+    
+    if node==goal:
+        print("----goal found----", mygoal)
+        found=True 
+        return 
+    
+    elif node not in visited:
+        print (node)
+        visited.add(node)
+        templist=graph[node]
+        templist.sort()
+        for neighbour in templist:
+            if found==False:
+                dfs(visited, graph, neighbour[1],mygoal)
+
+# Driver Code
+print("Following is the Depth-First Search")
+dfs(visited, graph, 'A',mygoal)

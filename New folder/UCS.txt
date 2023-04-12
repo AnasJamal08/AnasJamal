@@ -1,0 +1,48 @@
+from queue import PriorityQueue
+graph = {
+  'A' : [[10,'B'],[8,'C']],
+  'B' : [[5,'D'], [3,'F'],[2,'E']],
+  'C' : [[5,'F']],
+  'D' : [],
+  'E' : [[2,'F']],
+  'F' : []
+}
+
+mygoal='F' 
+
+def bfs(visited, graph, startnode,goal):  #function for dfs 
+    
+    expque=PriorityQueue()
+    path=[startnode]
+    visited = set() # Set to keep track of visited nodes of graph.
+    expque.put((0,startnode,startnode))
+    
+    while expque.qsize() > 0 :
+        
+        node=expque.get()
+        curcost=node[0]
+        curname=node[1]
+        curpath=node[2]
+        
+              
+        if curname not in visited:
+            visited.add(curname)
+           # print('name:', curname, '\t gn:', curcost)
+            
+            if curname==goal:
+                print ('---Goal Found---' )
+                print('Path Cost: ',curcost,'Path Track: ',curpath )
+                return
+            
+            suclist=graph[curname]
+            for sucnode in suclist:
+                if sucnode[1] not in visited:
+                    gn=sucnode[0]+curcost                                  
+                    st=''
+                    st=node[2]+' '+sucnode[1]
+                    expque.put((gn,sucnode[1],st))
+                    
+        
+# Driver Code
+print("Following is the Uniform Cost Search")
+bfs(visited, graph, 'A',mygoal)

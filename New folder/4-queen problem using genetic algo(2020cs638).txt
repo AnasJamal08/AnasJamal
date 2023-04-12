@@ -1,0 +1,249 @@
+#2020cs638
+#Muhammad Bilal
+
+
+import random
+queen_sample=[[1,4,1,3],[2,4,2,4],[3,4,1,4],[1,2,3,2]]
+board=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+points=[]
+pair=0
+pair_list=[]
+
+
+
+    
+    
+def update_population(sample1,sample2,sample1_index,sample2_index):
+    global points
+    points=[]
+    global pair_list
+    pair_list=[]
+    global queen_sample
+   # print("befor : ",queen_sample)
+    queen_sample[sample1_index]=sample1
+    queen_sample[sample2_index]=sample2
+    print("after : ",queen_sample)
+    
+    
+def mutation(sample1,sample2,sample1_index,sample2_index):
+    mutated1_index=random.randrange(2,4)
+    mutated_chromo1=random.randrange(1,4)
+    sample1[mutated1_index]=mutated_chromo1
+    
+    
+    mutated2_index=random.randrange(2,4)
+    mutated_chromo2=random.randrange(1,4)
+    sample2[mutated2_index]=mutated_chromo2
+    
+    print("Mutation")
+    print(sample1)
+    print(sample2)
+    update_population(sample1,sample2,sample1_index,sample2_index)
+    
+    
+    
+    
+
+    
+def crossover(sample1,sample2,sample1_index,sample2_index):
+    i=2
+    while i<4:
+        sample1[i],sample2[i]=sample2[i],sample1[i]
+        
+        i+=1
+        
+    print("crossover")
+    print(sample1)
+    print(sample2)
+    mutation(sample1,sample2,sample1_index,sample2_index)
+
+        
+        
+
+def selecting_pair():
+    global queen_sample
+    sample1_index=random.randrange(0,4)
+    sample1=queen_sample[sample1_index]
+    sample2_index=random.randrange(0,4)
+    while sample2_index==sample1_index:
+        sample2_index=random.randrange(0,4)
+   
+    sample2=queen_sample[sample2_index]
+    print(sample1_index)
+    print(sample1)
+    print(sample2_index)
+    print(sample2)
+    crossover(sample1,sample2,sample1_index,sample2_index)
+    
+    
+def probability():
+    global pair_list
+    total=sum(pair_list)
+    probability_list=[]
+    for i in range(4):
+        probability_list.append((pair_list[i]/total)*100)
+    print(probability_list)
+    
+    selecting_pair()
+    
+
+
+
+def queens():
+    global queen_sample
+    for i in range(4):
+        queen=queen_sample[i]
+        attacks(queen)
+        
+    
+    
+    
+
+
+    
+def attacks(quen):
+    global pair_list
+    #pair_list=[]
+    global points
+    points=[]
+    global pair
+    pair=0
+    global board
+    board=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+    for i in range(4):
+        col=i
+        row=quen[i]
+        board[row-1][col]='Q'
+        points.append([col,row-1])
+        
+
+    print("points = ",points)
+    
+    
+    for i in range(4):
+        list=points[i]
+        x1=list[1]
+        y1=list[0]
+        j=i+1
+        #print("for Q",i+1)
+        while j<4:
+            #print("Attack on Q",j+1)
+            list1=points[j]
+            j=j+1
+            x2=list1[1]
+            y2=list1[0]
+            is_attacking(x1,y1,x2,y2)
+    
+    pair_list.append(6-pair)       
+    for i in range(4):
+        for j in range(4):
+            print(board[i][j],end="   ")
+        print("\n")
+    print("\n","---------------------------","\n")
+
+    
+    
+def is_attacking(x1,y1,x2,y2):
+    #print("x1 : ",x1)
+    #print("y1 : ",y1)
+    #print("x2 : ",x2)
+    #print("y2 : ",y2)
+    check_dig(x1,y1,x2,y2)
+    #print("row func call")
+    check_row(x1,y1,x2,y2)
+    
+    
+def check_row(x1,y1,x2,y2):
+    global pair
+    if x1==x2:
+      #  print("attacking by row")
+        pair+=1
+    #return pair    
+        #print(pair)
+    
+    
+def check_dig(x1,y1,x2,y2):
+    global pair
+    
+    
+    
+    a=x1+1
+    b=y1+1
+    while(a<5 or b<5):
+        if a==x2 and b==y2:
+          #  print("Attacking !!!!")
+            pair+=1
+         #   print(pair)
+        a=a+1
+        b=b+1
+
+            
+    a=x1-1
+    b=y1-1
+    while(a>0 or b>0):
+        if a==x2 and b==y2:
+       #     print("attacking")
+            pair+=1
+      #      print(pair)
+        a=a-1
+        b=b-1
+        
+    a=x1+1
+    b=y1-1
+    
+    while a<5 and b>0:
+        if a==x2 and b==y2:
+            #print("attacking")
+            pair+=1
+           # print(pair)
+        a=a+1
+        b=b-1
+        
+    a=x1-1
+    b=y1+1
+    
+    while b<5 and a>0:
+        if a==x2 and b==y2:
+            #print("attacking")
+            
+            pair+=1
+            #print(pair)
+        a=a-1
+        b=b+1
+        
+        
+def repetition():
+    global pair_list
+    global board
+   
+    queens()
+    while True:
+        if 6 in pair_list:
+            index=pair_list.index(6)
+            goal=queen_sample[index]
+            print("goal Found",goal)
+            
+            
+            board=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+            for i in range(4):
+                col=i
+                row=goal[i]
+                board[row-1][col]='Q'
+                points.append([col,row-1])
+            
+            
+            
+            for i in range(4):
+                for j in range(4):
+                    print(board[i][j],end="   ")
+                print("\n")
+            
+            break
+        probability()
+        queens()
+        print(pair_list)
+        
+repetition()   
+print("Final Population : ",queen_sample)
+print("Total Non-Attcking pairs = ",pair_list)
+
